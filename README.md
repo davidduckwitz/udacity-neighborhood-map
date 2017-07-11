@@ -15,7 +15,9 @@ Just Download thw whole Script, unzip it and run index.html in your Browser (Jus
 - Multilingual (English / German)<br>
 - Onepage App<br>
 - Google Maps<br>
-- Filter / Search Places<br>
+- Knockout.js - Filter / Search Places<br>
+- Earthquake Warnings from 'earthquake.usgs.gov' API<br>
+- Personal Style to Google Map
 <br>
 Feel Free to learn from this Script, but don't use it for your own Udacity Project !<br>
 Made with JS & Love by David Duckwitz, 07/2017...<br>
