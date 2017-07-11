@@ -1,0 +1,30 @@
+{
+	"token": {
+		"Dave's Favorite Places":"Daves Plätze",
+		"Map":"Karte",
+		"Menu":"Menü",
+		"Git Repositori":"Git Repositori",
+		"Get Free Bitcoins":"Erhalte Kostenlos Bitcoins",
+		"Choose Language:":"Wähle Sprache",
+		"English":"Englisch",
+		"Deutsch":"German",
+		"October 10. 1983":"10. Oktober 1983",
+		"Here i'm was Born on October 10. 1983...":"Hier wurde ich am 10. Oktober 1983 geboren",
+		"My Birthplace":"Mein Geburtsort",
+		"Nice Place in Italy - Was here with Mom and Dad 8 times in the 1990's":"Hier war ich 8 mal im Urlaub mit Mutter, Vater, Bruder.",
+		"Catolica(Italy) - Favorite Holiday 2":"Wähle einen Platz",
+		"in October 2016, i moved back to my favorite Place 'Traetzhof' where my cats lived before (2015 - 2016)":"Im Oktober 2016 bin ich zurück an meinen lieblingsort gezogen, Trätzhof. Hier habe ich vorher mit meiner Katze Lily gelebt.",
+		"Here at Mallorca i had one of my best holidays":"Hier auf Mallorca habe ich die schönsten Urlaube erlebt",
+		"Actualy i live here with the mother of my Cat Lily (Grandma from Amy) (2016 - today)":"Aktuell lebe ich hier mit der Mutter von Lily (Großmutter von Amy)",
+		"Click Reset to show all places / reset the view":"Klicke hier um die ansicht zurückzusetzen",
+		"Here plays my Favorite Soccerclub - BvB 90 Dortmund":"Hier spielt mein Lieblingsfußballverein Bvb 09",
+		"When my Cat Amy was died on 16.06.2016, i brought her to this Place under a Big Tree. See you then my Girl...":"Hier habe ich meine Katze unter einem großen Baum beedigt, nachdem sie am 16. Juni 2016 gestorben ist. Bis dann meine kleine...",
+		"On August 26. 2016, I saw my Cat Lily the last time. In March i have found some pieces of her Skeleton on this Place.":"Am 26. August 2016 habe ich meine Katze hier das letzte mal gesehen. Im März 2017 habe hier teile ihres Skelettes gefunden",
+		"Here i lived before i moved into Fulda City (2000 - 2015)":"Hier habe ich gelebt, bevor ich wieder nach Fulda gezogen bin (2000 - 2015)"
+	},
+	"regex": [
+		["Budget", "งบประมาณ"],
+		["^Something at start of text", ""],
+		["This will be case insensitive", "i", ""]
+	]
+}

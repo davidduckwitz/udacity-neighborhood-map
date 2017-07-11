@@ -1,0 +1,80 @@
+{
+	title: 'Himeji Castle',
+	location: {
+		lat: 34.8394,
+		lng: 134.6939
+	},
+	description: "My favorite historical place in Japan. I love learning about medieval Japan and this castle was just so beautiful!"
+},
+{
+	title: 'Osaka Castle',
+	location: {
+		lat: 34.6873,
+		lng: 135.5262
+	},
+	description: "My favorite leader of Japan, Toyotomi Hideyoshi's castle, this castle was near my home while in Japan so I vistited it frequently."
+},
+{
+	title: 'Kobe Steakland',
+	location: {
+		lat: 34.6930,
+		lng: 135.1921
+	},
+	description: "I ate this on my last day in Japan. Kobe steak is so expensive, but so absolutely delicious."
+},
+{
+	title: 'Kwansei Gakuin University',
+	location: {
+		lat: 34.7679,
+		lng: 135.3466
+	},
+	description: "My university in Japan. I love this University. I spent 1 year studying here."
+},
+{
+	title: 'Kansai International Airport',
+	location: {
+		lat: 34.4320,
+		lng: 135.2304
+	},
+	description: "The airport where many adventures started and ended. I can't wait to come back to this airport."
+},
+{
+	title: 'Nagasaki',
+	location: {
+		lat: 32.7503,
+		lng: 129.8777
+	},
+	description: "My brother studied abroad here, It was quite hot when I visited but beautiful and sobering!"
+},
+{
+	title: 'Shibuya, Tokyo',
+	location: {
+		lat: 35.6618,
+		lng: 139.7041
+	},
+	description: "I only visited here for 2 days but I had an airbnb about 5 mins walk from the famous shibuya crossing. It was beautiful!"
+},
+{
+	title: 'Mount Koya',
+	location: {
+		lat: 34.2167,
+		lng: 135.5833
+	},
+	description: "I hiked the Choishimichi trail while I was here. It took 9 hours and was so amazing. I was so tired by the time I reached Koyasan."
+},
+{
+	title: 'Wakayama',
+	location: {
+		lat: 33.6782,
+		lng: 135.3481
+	},
+	description: "After my school got canceled for a week due to a bomb threat a couple friends and I spent a week at this beach town!"
+},
+{
+	title: 'Seoul',
+	location: {
+		lat: 37.5665,
+		lng: 126.9780
+	},
+	description: "I visited here for 4 days visited a friend who lived there. I disliked the haze but found the city to be beautiful!"
+}
