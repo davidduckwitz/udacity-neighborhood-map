@@ -10,8 +10,9 @@ In this Gmap Script you can see my favorite Places in my City (Fulda, Germany). 
 --> How to run:<br>
 1. Install a Webserver (or use shared Webhosting)<br>
 --> Webserver Install Linux:<br>
----> <code>sudo apt install apache2</code>
-Just Download the whole Script, unzip it and run index.html in your Browser (Just Double Click on it)<br>
+--> <code>sudo apt install apache2</code><br>
+Just Download the whole Script, unzip it and put the script into the folder <code>/var/www/html/</code><br>
+--> Open in your Browser: <code>http://127.0.0.1:80</code> or <code>http://localhost:80</code><br>
 <br>
 --> Features:<br>
 - Multilingual (English / German)<br>
