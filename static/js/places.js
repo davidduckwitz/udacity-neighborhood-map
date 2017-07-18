@@ -1,8 +1,12 @@
+var homeTowns = ["","Fulda", "Trätzhof", "Mallorca", "Catolica", "Dortmund"];
 //Places Data Fields - Icons = Marker Icon for GMap... is in Format Base64 :)
 var places = [
 {
-	id: 0,	
+	id: 0,
+	marker: 'marker-0',
 	title: 'Dortmund (BvB)- Favorite Sportsclub',
+	name: 'BvB 09 Dortmund',
+	homeTown: 'Dortmund',
 	date: "2003's",
 	description: "Here plays my Favorite Soccerclub - BvB 90 Dortmund",
 	weather: "cloudy",
@@ -15,8 +19,11 @@ var places = [
 },
 {
 	id: 1,
+	marker: 'marker-1',
 	title: 'Amys Restplace',
 	description: "When my Cat Amy was died on 16.06.2016, i brought her to this Place under a Big Tree. See you then my Girl...",
+	name: 'Amy Restplace',
+	homeTown: 'Trätzhof',
 	date: "June 19. 2016",
 	weather: "cloudy",
 	temp: "15",
@@ -28,8 +35,11 @@ var places = [
 },
 {
 	id: 2,
+	marker: 'marker-2',
 	title: 'Lilys Restplace',
 	description: "On August 26. 2016, I saw my Cat Lily the last time. In March i have found some pieces of her Skeleton on this Place.",
+	name: 'Lilys Restplace',
+	homeTown: 'Trätzhof',
 	date: "August 28 2016",
 	weather: "cloudy",
 	temp: "15",
@@ -41,7 +51,10 @@ var places = [
 },
 {
 	id: 3,
-	title: 'Old Home on Traetzhof',
+	marker: 'marker-3',
+	title: 'Old Home on Trätzhof',
+	name: 'Old Home Trätzhof',
+	homeTown: 'Trätzhof',
 	date: "January 2000",
 	description: "Here i lived before i moved into Fulda City (2000 - 2015)",
 	weather: "cloudy",
@@ -54,7 +67,10 @@ var places = [
 },
 {
 	id: 4,
+	marker: 'marker-4',
 	title: 'Old Home in Fulda',
+	name: 'Old Home Fulda',
+	homeTown: 'Fulda',
 	date: "March 23. 2015",
 	description: "in October 2016, i moved back to my favorite Place 'Traetzhof' where my cats lived before (2015 - 2016)",
 	weather: "cloudy",
@@ -67,7 +83,10 @@ var places = [
 },
 {
 	id: 5,
-	title: 'My Actual Home',
+	marker: 'marker-5',
+	title: 'My Actual Home on Trätzhof',
+	name: 'My Actual Home on Trätzhof',
+	homeTown: 'Trätzhof',
 	date: "October 01. 2016",
 	description: "Actualy i live here with the mother of my Cat Lily (Grandma from Amy) (2016 - today)",
 	weather: "cloudy",
@@ -80,8 +99,11 @@ var places = [
 },
 {
 	id: 6,
+	marker: 'marker-6',
 	title: 'Mallorca - Favorite Holiday 1',
 	date: "August 2014",
+	name: 'Mallorca - Favorite Holiday ',
+	homeTown: 'Mallorca',
 	description: "Here at Mallorca i had one of my best holidays",
 	weather: "cloudy",
 	temp: "15",
@@ -93,7 +115,10 @@ var places = [
 },
 {
 	id: 7,
+	marker: 'marker-7',
 	title: 'Catolica(Italy) - Favorite Holiday 2',
+	name: 'Catolica(Italy) - Favorite Holiday',
+	homeTown: 'Catolica',
 	date: "1990's",
 	description: "Nice Place in Italy - Was here with Mom and Dad 8 times in the 1990's",
 	weather: "cloudy",
@@ -106,8 +131,11 @@ var places = [
 },
 {
 	id: 8,
+	marker: 'marker-8',
 	title: 'My Birthplace',
 	description: "Here i'm was Born on October 10. 1983...",
+	name: 'My Birthplace',
+	homeTown: 'Erfurt',
 	date: "October 10. 1983",
 	weather: "cloudy",
 	temp: "15",

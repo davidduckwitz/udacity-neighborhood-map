@@ -1,81 +1,110 @@
-style1 = [
-{elementType: 'geometry', stylers: [{color: '#ebe3cd'}]},
-{elementType: 'labels.text.fill', stylers: [{color: '#523735'}]},
-{elementType: 'labels.text.stroke', stylers: [{color: '#f5f1e6'}]},
-  {
-	featureType: 'administrative',
-	elementType: 'geometry.stroke',
-	stylers: [{color: '#c9b2a6'}]
-  },
-  {
-	featureType: 'administrative.land_parcel',
-	elementType: 'geometry.stroke',
-	stylers: [{color: '#0a702d'}]
-  },
-  {
-	featureType: 'administrative.land_parcel',
-	elementType: 'labels.text.fill',
-	stylers: [{color: '#ae9e90'}]
-  },
-  {
-	featureType: 'poi',
-	elementType: 'geometry',
-	stylers: [{color: '#dfd2ae'}]
-  },
-  {
-	featureType: 'poi',
-	elementType: 'labels.text.fill',
-	stylers: [{color: '#93817c'}]
-  },
-  {
-	featureType: 'poi.park',
-	elementType: 'geometry.fill',
-	stylers: [{color: '#a5b076'}]
-  },
-  {
-	featureType: 'poi.park',
-	elementType: 'labels.text.fill',
-	stylers: [{color: '#447530'}]
-  },
-  {
-	featureType: 'road.highway.controlled_access',
-	elementType: 'geometry.stroke',
-	stylers: [{color: '#db8555'}]
-  },
-  {
-	featureType: 'road.local',
-	elementType: 'labels.text.fill',
-	stylers: [{color: '#806b63'}]
-  },
-  {
-	featureType: 'transit.line',
-	elementType: 'geometry',
-	stylers: [{color: '#dfd2ae'}]
-  },
-  {
-	featureType: 'transit.line',
-	elementType: 'labels.text.fill',
-	stylers: [{color: '#8f7d77'}]
-  },
-  {
-	featureType: 'transit.line',
-	elementType: 'labels.text.stroke',
-	stylers: [{color: '#ebe3cd'}]
-  },
-  {
-	featureType: 'transit.station',
-	elementType: 'geometry',
-	stylers: [{color: '#dfd2ae'}]
-  },
-  {
-	featureType: 'water',
-	elementType: 'geometry.fill',
-	stylers: [{color: '#008fc4'}]
-  },
-  {
-	featureType: 'water',
-	elementType: 'labels.text.fill',
-	stylers: [{color: '#ffffff'}]
-  }
-],
-{name: 'FavMap1'};
+// Variables
+var mapstart = {lat: 50.55809, lng: 9.68084};
+var openWeatherMapAPI = '9674e5fa9add44c373be389b10566f0a';	
+var bounds;
+var markers = [];
+var map;
+var infoWindows = [];
+var infoWindow;
+var bouncingMarker = null;
+var Record;
+var r;
+var records;
+var dats = places;
+var filteredRecords;
+var html = [];
+var wd = [];
+
+/*******************************
+ * In listview onclick of place*
+ ******************************/
+function loadPlace(index) {		
+	console.log('Load Place with id'+index);
+	lat = Number(places[index].location.lat);
+	lng = Number(places[index].location.lng);
+	coord = {lat: lat, lng: lng};
+	console.log(coord);
+	deleteMarkers();
+	window.setTimeout(function() {
+		addMarker(coord, index);
+	}, 500);	
+};
+
+// Thanks to URL https://stackoverflow.com/questions/8247626/bouncing-marker (The accepted Answer)
+var bouncingListener = function() {	
+	if(bouncingMarker){
+		bouncingMarker.setAnimation(null);
+	}
+	if(bouncingMarker != this) {
+		this.setAnimation(google.maps.Animation.BOUNCE);
+		bouncingMarker = this;
+	} else {
+		bouncingMarker = null;
+	}
+};
+
+// Sets the map on all markers in the array.
+setMapOnAll = function(map) {
+	for (var i = 0; i < markers.length; i++) {
+	  markers[i].setMap(map);
+	}
+};
+
+// Removes the markers from the map, but keeps them in the array.
+clearMarkers = function() {
+	setMapOnAll(null);
+};
+
+// Shows any markers currently in the array.
+showMarkers = function() {
+	setMapOnAll(map);
+};
+
+// Deletes all markers in the array by removing references to them.
+deleteMarkers = function() {
+	clearMarkers();
+	markers = [];
+};
+
+function loadInfoWindowContent(index, lt, lg){
+	var c = '<img width="20px;" height="20px;" src="'+places[index].icon+'"><h3>'+places[index].title+'</h3><br>'+
+	'<i>'+places[index].description+'</i><br>'+
+	'<span id="wdata"></span>';	
+	setTimeout(function(){ getWeather(lt, lg, 'wdata'); }, 300);
+	return c;
+}
+
+// Adds a marker to the map and push to the array.
+function addMarker(location, i) {
+	var infowindow = new google.maps.InfoWindow();
+	var marker;
+	datas = places;
+	marker = new google.maps.Marker({
+		position: loc,
+		map: map,
+		icon: places[i].icon,
+		title: places[i].title,
+		visible: true
+	});
+	markers.push(marker);
+	console.log(marker);
+	marker.addListener('click', bouncingListener);
+	//add infowindow to array
+	infoWindows.push(infowindow);
+	google.maps.event.addListener(marker, 'click', (function (marker, i) {
+		
+		return function () {
+			closeAllInfoWindows();
+			infowindow.setContent(loadInfoWindowContent(i), location.lt, location.lg);
+			infowindow.open(map, marker);
+		}				
+	})(marker, i));	
+		
+}
+
+/****************************************
+ * Error callback for GMap API request***
+ ****************************************/
+var mapError = function() {  
+  alert('Error Loading GoogleMaps Data vom API V3 - Please Check your Code');
+};
