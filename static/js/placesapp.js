@@ -47,27 +47,7 @@ var ViewModel = function (records, homeTowns, markers) {
         });
 		
     });
-	getWeather = function(lt, lg, id){
-	var html = document.getElementById(id);
-	// Weather API from Openweather - define url with Coords & API-Key (Source: https://github.com/google/maps-for-work-samples/tree/master/samples/maps/OpenWeatherMapLayer)
-		var weatherurl = "http://api.openweathermap.org/data/2.5/weather?lat=" + lt + "&lon=" + lg + "&APPID="+openWeatherMapAPI;
-		// makes call to weather api
-        $.ajax({
-            url: weatherurl,
-            dataType: "jsonp",
-            success: function(response) {
-				// math to calc temp found here: https://stackoverflow.com/questions/41686519/detect-a-geolocation-with-googleapis-and-receive-current-weather-for-this-locati
-                temperature = Math.round(response.main.temp - 273.15);
-                weather = response.weather["0"].description;
-				html.innerHTML = 'Weather: '+weather+' / Temperature: '+temperature;
-            },
-            error: function(response) {
-                weather = '<div class="alert alert-danger">Weather Not available right now - Maybe too much requests on weather api...</div>';
-                temperature = '<div class="alert alert-danger">Temperature Not available right now - Maybe too much requests on weather api...</div>';
-				html.innerHTML = weather+'<br>'+temperature;
-            }
-        });		
-	}
+	
 // Initial function (Callback) for gmap API	
 	initMap = function () {		
 		// Create a script tag and set the Earthquake Data....
@@ -88,7 +68,7 @@ var ViewModel = function (records, homeTowns, markers) {
 				var lat = places[i].location.lat;
 				var lng = places[i].location.lng;
 				loc = {lat: lat, lng: lng};			
-				addMarker(loc, i);
+				addMarker(lat, lng, i, places);
 				
 		}
 		map.addListener('click', bouncingListener);

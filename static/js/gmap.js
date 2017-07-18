@@ -26,7 +26,7 @@ function loadPlace(index) {
 	console.log(coord);
 	deleteMarkers();
 	window.setTimeout(function() {
-		addMarker(coord, index);
+		addMarker(lat, lng, index, places);
 	}, 500);	
 };
 
@@ -66,24 +66,54 @@ deleteMarkers = function() {
 	markers = [];
 };
 
+var getWeather = function(lt, lg, id){
+	var html = document.getElementById(id);
+	// Weather API from Openweather - define url with Coords & API-Key (Source: https://github.com/google/maps-for-work-samples/tree/master/samples/maps/OpenWeatherMapLayer)
+		var weatherurl = "http://api.openweathermap.org/data/2.5/weather?lat="+lt+"&lon="+lg+"&APPID="+openWeatherMapAPI;
+		// makes call to weather api
+        $.ajax({
+            url: weatherurl,
+            dataType: "jsonp",
+            success: function(response) {
+				// math to calc temp found here: https://stackoverflow.com/questions/41686519/detect-a-geolocation-with-googleapis-and-receive-current-weather-for-this-locati
+                temperature = Math.round(response.main.temp - 273.15);
+                weather = response.weather["0"].description;
+				html.innerHTML = 'Weather: '+weather+' / Temperature: '+temperature;
+            },
+            error: function(response) {
+                weather = '<div class="alert alert-danger">Weather Not available right now - Maybe too much requests on weather api...</div>';
+                temperature = '<div class="alert alert-danger">Temperature Not available right now - Maybe too much requests on weather api...</div>';
+				html.innerHTML = weather+'<br>'+temperature;
+            }
+        });		
+	};
+
 function loadInfoWindowContent(index, lt, lg){
 	var c = '<img width="20px;" height="20px;" src="'+places[index].icon+'"><h3>'+places[index].title+'</h3><br>'+
 	'<i>'+places[index].description+'</i><br>'+
-	'<span id="wdata"></span>';	
-	setTimeout(function(){ getWeather(lt, lg, 'wdata'); }, 300);
+	'<span id="wdata"></span>';
+	var lat = Number(lt);
+	var lng = Number(lg);
+	console.log(lat);
+	console.log(lng);
+	setTimeout(function(){ 
+		getWeather(lat, lng, 'wdata'); 
+	}, 300);
 	return c;
 }
 
 // Adds a marker to the map and push to the array.
-function addMarker(location, i) {
+function addMarker(lat, lng, i, alllocations) {
 	var infowindow = new google.maps.InfoWindow();
 	var marker;
-	datas = places;
+	var la = lat;
+	var lo = lng;
+	datas = alllocations;
 	marker = new google.maps.Marker({
 		position: loc,
 		map: map,
-		icon: places[i].icon,
-		title: places[i].title,
+		icon: datas[i].icon,
+		title: datas[i].title,
 		visible: true
 	});
 	markers.push(marker);
@@ -95,7 +125,7 @@ function addMarker(location, i) {
 		
 		return function () {
 			closeAllInfoWindows();
-			infowindow.setContent(loadInfoWindowContent(i), location.lt, location.lg);
+			infowindow.setContent(loadInfoWindowContent(i, la, lo));
 			infowindow.open(map, marker);
 		}				
 	})(marker, i));	
