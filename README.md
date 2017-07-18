@@ -8,6 +8,9 @@ Nanodegree Project "Neighborhood Map" for Udacity<br>
 In this Gmap Script you can see my favorite Places in my City (Fulda, Germany). <br>
 <br>
 --> How to run:<br>
+1. Install a Webserver (or use shared Webhosting)<br>
+--> Webserver Install Linux:<br>
+---> <code>sudo apt install apache2</code>
 Just Download the whole Script, unzip it and run index.html in your Browser (Just Double Click on it)<br>
 <br>
 --> Features:<br>
