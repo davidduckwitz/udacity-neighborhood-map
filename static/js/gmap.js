@@ -18,15 +18,24 @@ var wd = [];
 /*******************************
  * In listview onclick of place*
  ******************************/
-function loadPlace(index) {		
-	console.log('Load Place with id'+index);
+function loadPlace(index) {	
 	lat = Number(places[index].location.lat);
 	lng = Number(places[index].location.lng);
-	coord = {lat: lat, lng: lng};
-	console.log(coord);
-	deleteMarkers();
+	coord = {lat: lat, lng: lng};	
+	//deleteMarkers();
 	window.setTimeout(function() {
-		addMarker(lat, lng, index, places);
+		//addMarker(lat, lng, index, places);
+		for (var i = 0; i < markers.length; i++) {
+			if(i !== index){
+				console.log('Set Marker to "invisible"');
+				 markers[i].setVisible(false);
+			}
+			if(i === index){
+				console.log('Set Marker to "visible"');
+				 markers[i].setVisible(true);
+			}
+		 
+		}
 	}, 500);	
 };
 
@@ -114,6 +123,7 @@ function addMarker(lat, lng, i, alllocations) {
 		map: map,
 		icon: datas[i].icon,
 		title: datas[i].title,
+		id: datas[i].id,
 		visible: true
 	});
 	markers.push(marker);
@@ -121,8 +131,7 @@ function addMarker(lat, lng, i, alllocations) {
 	marker.addListener('click', bouncingListener);
 	//add infowindow to array
 	infoWindows.push(infowindow);
-	google.maps.event.addListener(marker, 'click', (function (marker, i) {
-		
+	google.maps.event.addListener(marker, 'click', (function (marker, i) {		
 		return function () {
 			closeAllInfoWindows();
 			infowindow.setContent(loadInfoWindowContent(i, la, lo));
