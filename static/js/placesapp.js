@@ -1,4 +1,4 @@
-var Record = function (map, id, title, name, homeTown, date, description, icon, location) {
+var Record = function (map, id, title, name, homeTown, date, description, icon, location, marker) {
     this.id = id;
     this.title = title;
     this.name = name;
@@ -7,6 +7,7 @@ var Record = function (map, id, title, name, homeTown, date, description, icon, 
     this.description = description;
     this.icon = icon;
     this.location = location;
+	this.marker = marker;
 };
 
 var ViewModel = function (records, homeTowns, markers) {
@@ -22,10 +23,11 @@ var ViewModel = function (records, homeTowns, markers) {
                 i.date,
                 i.description,
                 i.icon,
-                i.location);
+                i.location,
+				i.marker);
         })
     );
-
+	self.map = ko.observable(map);
     self.nameSearch = ko.observable('');
     self.townSearch = ko.observable('');
     self.filteredRecords = ko.computed(function () {
@@ -35,18 +37,21 @@ var ViewModel = function (records, homeTowns, markers) {
         return ko.utils.arrayFilter(self.records(), function (r) {
             //console.log('array filtered...');
             //console.log(self.records());
-			for (var i = 0; i < markers.length; i++) {
+			for (var i = 0; i < markers.length; i++) {				
 				
-				if(r.name.toLowerCase().indexOf(nameSearch) !== -1 && (r.homeTown === townSearch || townSearch === "")){
-					console.log('Set Marker to "visible"');
-					markers[i].setVisible(true);
-				} else {
-					markers[i].setVisible(false);
-					console.log('Set Marker to "invisible"');
+				if(r.title.toLowerCase().indexOf(nameSearch) !== -1 && (r.homeTown === townSearch || townSearch === "")){
+					if(r.id === markers[i].id){
+						markers[i].setVisible(true);
+						console.log('visible: '+markers[i].id);
+					} if(r.id !== markers[i].id) {
+						markers[i].setVisible(false);
+						console.log('invisible');					
+					}					
 				}
-			 
+
 			}
-            return r.name.toLowerCase().indexOf(nameSearch) !== -1 && (r.homeTown === townSearch || townSearch === "");
+			console.log(r.title.toLowerCase().indexOf(nameSearch));
+            return r.title.toLowerCase().indexOf(nameSearch) !== -1 && (r.homeTown === townSearch || townSearch === "");
         });
 
     }, self);
@@ -82,6 +87,81 @@ var ViewModel = function (records, homeTowns, markers) {
             infoWindows[i].close();
         }
     };
+	loadInfoWindowContent = function (index, lt, lg){
+		var weatherurl = "http://api.openweathermap.org/data/2.5/weather?lat="+lt+"&lon="+lg+"&APPID="+openWeatherMapAPI;
+		var c;
+		c = '<img width="20px;" height="20px;" src="'+places[index].icon+'"><h3>'+places[index].title+'</h3><br>'+
+		'<i>'+places[index].description+'</i><br>'+
+		'<span id="wdata">Weather: '+places[index].weather+' / Temperature: '+places[index].temp+'</span>';
+		// makes call to weather api
+			$.ajax({
+				url: weatherurl,
+				dataType: "jsonp",
+				success: function(response) {
+					// math to calc temp found here: https://stackoverflow.com/questions/41686519/detect-a-geolocation-with-googleapis-and-receive-current-weather-for-this-locati
+					temperature = Math.round(response.main.temp - 273.15);
+					weather = response.weather["0"].description;			
+					console.log(weather+'<br>'+temperature);
+				},
+				error: function(response) {
+					weather = '<div class="alert alert-danger">Weather Not available right now - Maybe too much requests on weather api...</div>';
+					temperature = '<div class="alert alert-danger">Temperature Not available right now - Maybe too much requests on weather api...</div>';
+
+					console.log(weather+'<br>'+temperature);
+				}
+			});
+		return c;
+	};
+
+	// Adds a marker to the map and push to the array.
+	addMarker = function(lat, lng, i, alllocations) {
+		var infowindow = new google.maps.InfoWindow();
+		var marker;
+		var la = lat;
+		var lo = lng;
+		datas = alllocations;
+		marker = new google.maps.Marker({
+			position: loc,
+			map: map,
+			icon: datas[i].icon,
+			title: datas[i].title,
+			id: datas[i].id,
+			visible: true
+		});
+		markers.push(marker);
+		console.log(marker);
+		marker.addListener('click', bouncingListener);
+		//add infowindow to array
+		infoWindows.push(infowindow);
+		google.maps.event.addListener(marker, 'click', (function (marker, i) {		
+			return function () {
+				closeAllInfoWindows();
+				infowindow.setContent(loadInfoWindowContent(i, la, lo));
+				infowindow.open(map, marker);
+			}				
+		})(marker, i));
+	};
+	getWeather = function(lt, lg, id){
+		var html = document.getElementById(id);
+		// Weather API from Openweather - define url with Coords & API-Key (Source: https://github.com/google/maps-for-work-samples/tree/master/samples/maps/OpenWeatherMapLayer)
+		var weatherurl = "http://api.openweathermap.org/data/2.5/weather?lat="+lt+"&lon="+lg+"&APPID="+openWeatherMapAPI;
+		// makes call to weather api
+		$.ajax({
+			url: weatherurl,
+			dataType: "jsonp",
+			success: function(response) {
+				// math to calc temp found here: https://stackoverflow.com/questions/41686519/detect-a-geolocation-with-googleapis-and-receive-current-weather-for-this-locati
+				temperature = Math.round(response.main.temp - 273.15);
+				weather = response.weather["0"].description;
+				html.innerHTML = 'Weather: '+weather+' / Temperature: '+temperature;
+			},
+			error: function(response) {
+				weather = '<div class="alert alert-danger">Weather Not available right now - Maybe too much requests on weather api...</div>';
+				temperature = '<div class="alert alert-danger">Temperature Not available right now - Maybe too much requests on weather api...</div>';
+				html.innerHTML = weather+'<br>'+temperature;
+			}
+		});		
+	};
     // Create Marker & InfoWindows for Earthquake data from "earthquake.usgs.gov"
 	// WARNING: i know i should write code like "Udacity Style Guide / naming guide"
 	// But google named it like me: https://developers.google.com/maps/documentation/javascript/earthquakes?hl=de
@@ -111,7 +191,7 @@ var ViewModel = function (records, homeTowns, markers) {
         }
     };
 }
-ko.applyBindings(new ViewModel(places, homeTowns, markers, filteredRecords));
+ko.applyBindings(new ViewModel(places, homeTowns, markers));
 
 // Multilanguage Vars for JQUERY-Lang
 var lang = new Lang();
