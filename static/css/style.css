@@ -1,0 +1,15 @@
+.scrollable {
+	overflow-y: auto;
+}
+.scrollable-80 {
+	overflow-y: auto; height: 80vh;
+}
+.scrollable-90 {
+	width: 100%; height: 90vh;
+}
+.b-100-w-70 {
+	background-size: 100%; width: 70px;
+}
+.p-top-17 {
+	padding-top: 17px;
+}
