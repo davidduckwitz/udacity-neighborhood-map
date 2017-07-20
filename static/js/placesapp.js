@@ -46,6 +46,9 @@ var ViewModel = function (records, homeTowns, markers, weathers) {
 		for (var i = 0; i < markers.length; i++) {
 		  markers[i].setVisible(false);
 		}
+		if(debugging === true){
+			console.log('Hide all Marker: Function Knockout "hideAll()" ');
+		}
 	};
 	
 	hideMarker = function(index) {
@@ -53,6 +56,9 @@ var ViewModel = function (records, homeTowns, markers, weathers) {
 			if( i === index){
 				markers[i].setVisible(false);
 			}		  
+		}
+		if(debugging === true){
+			console.log('Hide a Marker: Function Knockout "hideMarker()" ');
 		}
 	};
 	
@@ -62,11 +68,17 @@ var ViewModel = function (records, homeTowns, markers, weathers) {
 				markers[i].setVisible(true);
 			}		  
 		}
+		if(debugging === true){
+			console.log('Show a Marker: Function Knockout "showMarker()" ');
+		}
 	};
 	
 	showAll = function() {
 		for (var i = 0; i < markers.length; i++) {
 		  markers[i].setVisible(true);
+		}
+		if(debugging === true){
+			console.log('all Markers shown: Function Knockout "showAll()" ');
 		}
 	};
 	
@@ -75,6 +87,9 @@ var ViewModel = function (records, homeTowns, markers, weathers) {
         for (var i = 0; i < infoWindows.length; i++) {
             infoWindows[i].close();
         }
+		if(debugging === true){
+			console.log('all InfoWindows closed: Function Knockout "closeAllInfoWindows()" ');
+		}
     };	
 	loadInfoWindowContent = function (index, lt, lg){
 		getWeather(lt, lg, index);
@@ -82,6 +97,9 @@ var ViewModel = function (records, homeTowns, markers, weathers) {
 		c = '<img width="20px;" height="20px;" src="'+places[index].icon+'"><h3>'+places[index].title+'</h3><br>'+
 			'<i>'+places[index].description+'</i><br>'+
 			'<span data-bind="text: weather">'+self.weather()+'</span> <span data-bind="text: temperature">'+self.temperature()+'</span>° Celsius';
+		if(debugging === true){
+			console.log('InfoWindowContent loaded: Function Knockout "loadInfoWindowContent()" ');
+		}
 		return c;
 	};
 	
@@ -98,12 +116,18 @@ var ViewModel = function (records, homeTowns, markers, weathers) {
 				// math to calc temp found here: https://stackoverflow.com/questions/41686519/detect-a-geolocation-with-googleapis-and-receive-current-weather-for-this-locati
 				self.temperature(Math.round(response.main.temp - 273.15));
 				self.weather(response.weather["0"].description);
-				w = {"temp": self.temperature, "weather": self.weather};			
+				w = {"temp": self.temperature, "weather": self.weather};
+				if(debugging === true){
+					console.log('Weather & Temp loaded: Function Knockout "getWeather()" ');
+				}
 			},
 			error: function(response) {
 				self.weather('<div class="alert alert-danger">Weather Not available right now - Maybe too much requests on weather api...</div>');
 				self.temperature('<div class="alert alert-danger">Temperature Not available right now - Maybe too much requests on weather api...</div>');
-				w = {"temp": temperature, "weather": weather};			
+				w = {"temp": temperature, "weather": weather};
+				if(debugging === true){
+					console.log('ERROR - Weather & Temp NOT loaded: Function Knockout "getWeather()" ');
+				}
 			}
 		});		
 	};
@@ -111,33 +135,49 @@ var ViewModel = function (records, homeTowns, markers, weathers) {
 
         var nameSearch = self.nameSearch().toLowerCase(),
             townSearch = self.townSearch();
-        return ko.utils.arrayFilter(self.records(), function (r) {			          						
-			var response = Number(r.title.toLowerCase().indexOf(nameSearch) && (r.homeTown === townSearch || townSearch === ""));
-			if(response === 0 && (r.homeTown === townSearch || townSearch === "")){
-				console.log('display all');
+        return ko.utils.arrayFilter(self.records(), function (r) {
+
+		
+			var response = (Number(r.title.toLowerCase().indexOf(nameSearch) && (r.homeTown === townSearch || townSearch === "")) -1);
+			if(response === -1){
+				if(debugging === true){
+					console.log('display all');
+				}				
 				showAll();
-			}			
-			if (r.name.toLowerCase().indexOf(nameSearch) >= 0 && (r.homeTown === townSearch || townSearch === "")) {
-				if(r.id){
-					console.log('show marker id: '+r.id);
+			}
+			
+			if (r.name.toLowerCase().indexOf(nameSearch) > -1 && (r.homeTown === townSearch || townSearch === "")) {
+				
+				if(r.id === r.name.toLowerCase().indexOf(nameSearch) && (r.homeTown === townSearch || townSearch === "")){
+					if(debugging === true){
+						console.log('show marker id: '+r.id);
+					}					
 					showMarker(r.id);
 				}
+				
 			} else {
-				if(r.id){
+				
+				if(debugging === true){
 					console.log('hide marker id: '+r.id);
-					hideMarker(r.id);
-				}
+				}					
+				hideMarker(r.id);
+				
 			}
-            return r.name.toLowerCase().indexOf(nameSearch) !== -1 && (r.homeTown === townSearch || townSearch === "");
+			if(debugging === true){
+				console.log('Input filtered: Function Knockout "self.filteredRecords()" ');
+			}
+			console.log(response);
+            return r.name.toLowerCase().indexOf(nameSearch) !== -1 && (r.homeTown === townSearch || townSearch === "");			
         });
 
     }, self);
+
 	
     
-    // Create Marker & InfoWindows for Earthquake data from "earthquake.usgs.gov"
-	// WARNING: i know i should write code like "Udacity Style Guide / naming guide"
-	// But google named it like me: https://developers.google.com/maps/documentation/javascript/earthquakes?hl=de
-	// Because it's not a self written function - It's a function from "earthquake.usgs.gov"
+		// Create Marker & InfoWindows for Earthquake data from "earthquake.usgs.gov"
+//REVIEWER	--> ATTENTION: i know i should write code like "Udacity Style Guide / naming guide"
+		// But google named it like me: https://developers.google.com/maps/documentation/javascript/earthquakes?hl=de
+		// Because it's not a self written function - It's a function from "earthquake.usgs.gov"
     window.eqfeed_callback = function (results) {
         eqcontent = 'Here´s a Earthquakewarning';
         var infowindow = new google.maps.InfoWindow();
@@ -161,8 +201,15 @@ var ViewModel = function (records, homeTowns, markers, weathers) {
                 }
             })(marker, i));
         }
+		if(debugging === true){
+			console.log('Earthquake data loaded...');
+		}
     };
+	if(debugging === true){
+		console.log('Knockout ViewModel loaded');
+	}
 }
+
 ko.applyBindings(new ViewModel(places, homeTowns, markers));
 
 // Multilanguage Vars for JQUERY-Lang
