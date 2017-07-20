@@ -1,4 +1,4 @@
-var Record = function (map, id, title, name, homeTown, date, description, icon, location, marker) {
+var Record = function Record(map, id, title, name, homeTown, date, description, icon, location, marker) {
     this.id = id;
     this.title = title;
     this.name = name;
@@ -6,11 +6,10 @@ var Record = function (map, id, title, name, homeTown, date, description, icon, 
     this.date = date;
     this.description = description;
     this.icon = icon;
-    this.location = location;
-	this.marker = marker;
+    this.location = location;	
 };
 
-var ViewModel = function (records, homeTowns, markers) {
+var ViewModel = function (records, homeTowns, markers, weathers) {
     var self = this;
     self.homeTowns = ko.observableArray(homeTowns);
     self.records = ko.observableArray(
@@ -27,141 +26,114 @@ var ViewModel = function (records, homeTowns, markers) {
 				i.marker);
         })
     );
+	// Knockout Observable on Weather Data from Openweather API
+	self.weather = ko.observable('No Weather for this Place');
+	self.temperature = ko.observable('No Temperature for this Place');
+	
 	self.map = ko.observable(map);
     self.nameSearch = ko.observable('');
     self.townSearch = ko.observable('');
-    self.filteredRecords = ko.computed(function () {
-
-        var nameSearch = self.nameSearch().toLowerCase(),
-            townSearch = self.townSearch();
-        return ko.utils.arrayFilter(self.records(), function (r) {
-            //console.log('array filtered...');
-            //console.log(self.records());
-			for (var i = 0; i < markers.length; i++) {				
-				
-				if(r.title.toLowerCase().indexOf(nameSearch) !== -1 && (r.homeTown === townSearch || townSearch === "")){
-					if(r.id === markers[i].id){
-						markers[i].setVisible(true);
-						console.log('visible: '+markers[i].id);
-					} if(r.id !== markers[i].id) {
-						markers[i].setVisible(false);
-						console.log('invisible');					
-					}					
-				}
-
-			}
-			console.log(r.title.toLowerCase().indexOf(nameSearch));
-            return r.title.toLowerCase().indexOf(nameSearch) !== -1 && (r.homeTown === townSearch || townSearch === "");
-        });
-
-    }, self);
+	self.markers = ko.observable(markers);
+	// Sets the map on all markers in the array.
+	setMapOnAll = function(map) {
+		for (var i = 0; i < markers.length; i++) {
+		  markers[i].setMap(map);
+		}
+	};
 	
-    // Initial function (Callback) for Google Maps API
-    initMap = function () {
-        // Create the script tag for the Earthquake Data
-        var script = document.createElement('script');
-        script.src = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp';
-        document.getElementsByTagName('head')[0].appendChild(script);
-        bounds = new google.maps.LatLngBounds();
-
-        // gmapstyles are loaded from "static/js/gmapstyles.js"
-        map = new google.maps.Map(document.getElementById('gmap'), {
-            center: mapstart,
-            zoom: 5,
-            styles: gmapstyles
-        });
-
-        // Iterate trough my places / add marker & eventlistener
-        for (i = 0; i < places.length; i++) {
-            var lat = places[i].location.lat;
-            var lng = places[i].location.lng;
-            loc = { lat: lat, lng: lng };
-            addMarker(lat, lng, i, places);
-
-        }
-        map.addListener('click', bouncingListener);
-    };
+	// Hide all Markers
+	hideAll = function() {
+		for (var i = 0; i < markers.length; i++) {
+		  markers[i].setVisible(false);
+		}
+	};
+	
+	hideMarker = function(index) {
+		for (var i = 0; i < markers.length; i++) {
+			if( i === index){
+				markers[i].setVisible(false);
+			}		  
+		}
+	};
+	
+	showMarker = function(index) {
+		for (var i = 0; i < markers.length; i++) {
+			if( i === index){
+				markers[i].setVisible(true);
+			}		  
+		}
+	};
+	
+	showAll = function() {
+		for (var i = 0; i < markers.length; i++) {
+		  markers[i].setVisible(true);
+		}
+	};
+	
     // Close all InfowWindows
     closeAllInfoWindows = function () {
         for (var i = 0; i < infoWindows.length; i++) {
             infoWindows[i].close();
         }
-    };
+    };	
 	loadInfoWindowContent = function (index, lt, lg){
-		var weatherurl = "http://api.openweathermap.org/data/2.5/weather?lat="+lt+"&lon="+lg+"&APPID="+openWeatherMapAPI;
+		getWeather(lt, lg, index);
 		var c;
 		c = '<img width="20px;" height="20px;" src="'+places[index].icon+'"><h3>'+places[index].title+'</h3><br>'+
-		'<i>'+places[index].description+'</i><br>'+
-		'<span id="wdata">Weather: '+places[index].weather+' / Temperature: '+places[index].temp+'</span>';
-		// makes call to weather api
-			$.ajax({
-				url: weatherurl,
-				dataType: "jsonp",
-				success: function(response) {
-					// math to calc temp found here: https://stackoverflow.com/questions/41686519/detect-a-geolocation-with-googleapis-and-receive-current-weather-for-this-locati
-					temperature = Math.round(response.main.temp - 273.15);
-					weather = response.weather["0"].description;			
-					console.log(weather+'<br>'+temperature);
-				},
-				error: function(response) {
-					weather = '<div class="alert alert-danger">Weather Not available right now - Maybe too much requests on weather api...</div>';
-					temperature = '<div class="alert alert-danger">Temperature Not available right now - Maybe too much requests on weather api...</div>';
-
-					console.log(weather+'<br>'+temperature);
-				}
-			});
+			'<i>'+places[index].description+'</i><br>'+
+			'<span data-bind="text: weather">'+self.weather()+'</span> <span data-bind="text: temperature">'+self.temperature()+'</span>° Celsius';
 		return c;
 	};
-
-	// Adds a marker to the map and push to the array.
-	addMarker = function(lat, lng, i, alllocations) {
-		var infowindow = new google.maps.InfoWindow();
-		var marker;
-		var la = lat;
-		var lo = lng;
-		datas = alllocations;
-		marker = new google.maps.Marker({
-			position: loc,
-			map: map,
-			icon: datas[i].icon,
-			title: datas[i].title,
-			id: datas[i].id,
-			visible: true
-		});
-		markers.push(marker);
-		console.log(marker);
-		marker.addListener('click', bouncingListener);
-		//add infowindow to array
-		infoWindows.push(infowindow);
-		google.maps.event.addListener(marker, 'click', (function (marker, i) {		
-			return function () {
-				closeAllInfoWindows();
-				infowindow.setContent(loadInfoWindowContent(i, la, lo));
-				infowindow.open(map, marker);
-			}				
-		})(marker, i));
-	};
-	getWeather = function(lt, lg, id){
-		var html = document.getElementById(id);
+	
+	getWeather = function(lt, lg, index){		
 		// Weather API from Openweather - define url with Coords & API-Key (Source: https://github.com/google/maps-for-work-samples/tree/master/samples/maps/OpenWeatherMapLayer)
 		var weatherurl = "http://api.openweathermap.org/data/2.5/weather?lat="+lt+"&lon="+lg+"&APPID="+openWeatherMapAPI;
 		// makes call to weather api
 		$.ajax({
 			url: weatherurl,
 			dataType: "jsonp",
+			places: places,
+			index: index,
 			success: function(response) {
 				// math to calc temp found here: https://stackoverflow.com/questions/41686519/detect-a-geolocation-with-googleapis-and-receive-current-weather-for-this-locati
-				temperature = Math.round(response.main.temp - 273.15);
-				weather = response.weather["0"].description;
-				html.innerHTML = 'Weather: '+weather+' / Temperature: '+temperature;
+				self.temperature(Math.round(response.main.temp - 273.15));
+				self.weather(response.weather["0"].description);
+				w = {"temp": self.temperature, "weather": self.weather};			
 			},
 			error: function(response) {
-				weather = '<div class="alert alert-danger">Weather Not available right now - Maybe too much requests on weather api...</div>';
-				temperature = '<div class="alert alert-danger">Temperature Not available right now - Maybe too much requests on weather api...</div>';
-				html.innerHTML = weather+'<br>'+temperature;
+				self.weather('<div class="alert alert-danger">Weather Not available right now - Maybe too much requests on weather api...</div>');
+				self.temperature('<div class="alert alert-danger">Temperature Not available right now - Maybe too much requests on weather api...</div>');
+				w = {"temp": temperature, "weather": weather};			
 			}
 		});		
 	};
+    self.filteredRecords = ko.computed(function () {
+
+        var nameSearch = self.nameSearch().toLowerCase(),
+            townSearch = self.townSearch();
+        return ko.utils.arrayFilter(self.records(), function (r) {			          						
+			var response = Number(r.title.toLowerCase().indexOf(nameSearch) && (r.homeTown === townSearch || townSearch === ""));
+			if(response === 0 && (r.homeTown === townSearch || townSearch === "")){
+				console.log('display all');
+				showAll();
+			}			
+			if (r.name.toLowerCase().indexOf(nameSearch) >= 0 && (r.homeTown === townSearch || townSearch === "")) {
+				if(r.id){
+					console.log('show marker id: '+r.id);
+					showMarker(r.id);
+				}
+			} else {
+				if(r.id){
+					console.log('hide marker id: '+r.id);
+					hideMarker(r.id);
+				}
+			}
+            return r.name.toLowerCase().indexOf(nameSearch) !== -1 && (r.homeTown === townSearch || townSearch === "");
+        });
+
+    }, self);
+	
+    
     // Create Marker & InfoWindows for Earthquake data from "earthquake.usgs.gov"
 	// WARNING: i know i should write code like "Udacity Style Guide / naming guide"
 	// But google named it like me: https://developers.google.com/maps/documentation/javascript/earthquakes?hl=de
