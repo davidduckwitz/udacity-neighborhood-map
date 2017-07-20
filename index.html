@@ -24,7 +24,8 @@
     <!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<!-- Optional theme -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<link rel="stylesheet" href="static/css/style.css">
 	<!-- Load rest of the Scripts on the end to speedup loading -->
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -81,9 +82,9 @@
 	<nav class="navbar navbar-default navbar-fixed-bottom">
 	  <div class="container-fluid text-center">
 		<ul class="nav navbar-nav">
-			<li class="navbar-item" style="padding-top: 17px;"><span lang="en">Choose Language:</span></li>
-			<li class="navbar-item"><a href="#" style="background-size: 100%; width: 70px;" onclick="window.lang.change('en'); return false;"><span lang="en">English</span></a></li>
-			<li class="navbar-item"><a href="#" style="background-size: 100%; width: 70px;" onclick="window.lang.change('de'); return false;"><span lang="en">Deutsch</span></a></li>
+			<li class="navbar-item p-top-17"><span lang="en">Choose Language:</span></li>
+			<li class="navbar-item"><a class="b-100-w-70" href="#" data-bind="click: function() { window.lang.change('en') }"><span lang="en">English</span></a></li>
+			<li class="navbar-item"><a class="b-100-w-70" href="#" data-bind="click: function() { window.lang.change('de') }"><span lang="en">Deutsch</span></a></li>
 			<!-- Zum anzeigen von Flaggen: class="flag-icon flag-icon-de btn btn-default" -->
 		</ul>
 			<center><a href="https://freebitco.in/?r=647549"><img class="img-responsive" src="https://static1.freebitco.in/banners/468x60-3.png"></a></center>
@@ -93,8 +94,8 @@
 <!-- Main Content -->
  <div class="container-fluid">
 	<div class="row">
-		<div class="col-md-3 panel panel-default" style="">
-			<div style="overflow-y: auto; height: 80vh;">
+		<div class="col-md-3 panel panel-default">
+			<div class="srollable-80">
 				<header>
 					<!-- knockout Filter Input -->					
 					Name: <input class="form-control" data-bind="value: nameSearch, valueUpdate: 'afterkeydown'" />
@@ -107,7 +108,7 @@
 				</div>
 			</div>
 				
-				<div class="panel panel-default" style="overflow-y: auto;">
+				<div class="panel panel-default scrollable">
 					<ul class="media-list">
 						<li class="media">
 							<div class="media">
@@ -126,7 +127,7 @@
 				
 		</div>
 		<div class="col-md-9 panel panel-default">
-			<div id="gmap" style="width: 100%; height: 90vh;"></div>
+			<div id="gmap" class="scrollable-90"></div>
 		</div>
 	</div>
  </div>
