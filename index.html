@@ -20,30 +20,30 @@
 	<meta name="DC.Rights" content="David Duckwitz">
 	<meta name="DC.Description" content="Udacity Fullstack Nanodegree Project 'Neighborhood Map' by David Duckwitz">
 	<meta name="DC.Language" content="en">    
-    <title>Neighborhood-Map</title>	
-    <!-- Latest compiled and minified CSS -->
+        <title>Neighborhood-Map</title>	
+        <!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<!-- Optional theme -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 	<link rel="stylesheet" href="static/css/style.css">
 	<!-- Load rest of the Scripts on the end to speedup loading -->
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->	
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->	
 	<!-- 
-		Thanks to URL: http://opensoul.org/2011/06/23/live-search-with-knockoutjs/  
-			= Knockout Live Search (Filter)
-		Thanks to URL: https://stackoverflow.com/questions/18798520/how-to-add-custom-animation-on-google-map-v3-marker-when-i-drop-each-marker-one
-			= GMap Marker Animation
-		Thanks to URL : https://developers.google.com/maps/documentation/javascript/examples/infowindow-simple?hl=de
-			= GMap Info Window
-		Thanks to URL: https://developers.google.com/maps/documentation/javascript/examples/style-array?hl=de
-			= GMap Nightmode Style
-		Thanks to URL: https://developers.google.com/maps/documentation/javascript/examples/marker-simple?hl=de
-			= Add Marker to GMap
+        Thanks to URL: http://opensoul.org/2011/06/23/live-search-with-knockoutjs/  
+                = Knockout Live Search (Filter)
+        Thanks to URL: https://stackoverflow.com/questions/18798520/how-to-add-custom-animation-on-google-map-v3-marker-when-i-drop-each-marker-one
+                = GMap Marker Animation
+        Thanks to URL : https://developers.google.com/maps/documentation/javascript/examples/infowindow-simple?hl=de
+                = GMap Info Window
+        Thanks to URL: https://developers.google.com/maps/documentation/javascript/examples/style-array?hl=de
+                = GMap Nightmode Style
+        Thanks to URL: https://developers.google.com/maps/documentation/javascript/examples/marker-simple?hl=de
+                = Add Marker to GMap
 	-->
 </head>
 <body>
@@ -80,103 +80,100 @@
 	</nav>
 	<!-- Navbar Bottom -->
 	<nav class="navbar navbar-default navbar-fixed-bottom">
-	  <div class="container-fluid text-center">
-		<ul class="nav navbar-nav">
-			<li class="navbar-item p-top-17"><span lang="en">Choose Language:</span></li>
-			<li class="navbar-item"><a class="b-100-w-70" href="#" data-bind="click: function() { window.lang.change('en') }"><span lang="en">English</span></a></li>
-			<li class="navbar-item"><a class="b-100-w-70" href="#" data-bind="click: function() { window.lang.change('de') }"><span lang="en">Deutsch</span></a></li>
-			<!-- Zum anzeigen von Flaggen: class="flag-icon flag-icon-de btn btn-default" -->
-		</ul>
-			<center><a href="https://freebitco.in/?r=647549"><img class="img-responsive" src="https://static1.freebitco.in/banners/468x60-3.png"></a></center>
-	  </div><!-- /.container-fluid -->
+            <div class="container-fluid text-center">
+                <ul class="nav navbar-nav">
+                    <li class="navbar-item p-top-17"><span lang="en">Choose Language:</span></li>
+                    <li class="navbar-item"><a class="b-100-w-70" href="#" data-bind="click: function() { window.lang.change('en') }"><span lang="en">English</span></a></li>
+                    <li class="navbar-item"><a class="b-100-w-70" href="#" data-bind="click: function() { window.lang.change('de') }"><span lang="en">Deutsch</span></a></li>
+                    <!-- Zum anzeigen von Flaggen: class="flag-icon flag-icon-de btn btn-default" -->
+                </ul>
+                <center><a href="https://freebitco.in/?r=647549"><img class="img-responsive" src="https://static1.freebitco.in/banners/468x60-3.png"></a></center>
+            </div><!-- /.container-fluid -->
 	</nav>
 	
-<!-- Main Content -->
- <div class="container-fluid">
-	<div class="row">
-		<div class="col-md-3 panel panel-default">
-			<div class="srollable-80">
-				<header>
-					<!-- knockout Filter Input -->					
-					Name: <input class="form-control" data-bind="value: nameSearch, valueUpdate: 'afterkeydown'" />
-					HomeTown: <select class="form-control" data-bind="options: homeTowns, value: townSearch"></select>
-					<hr>
-				 </header>
-				<div class="content">
-					<ul class="media-list" data-bind="template: {name:'place', foreach:filteredRecords}"></ul>
-					
-				</div>
-			</div>
-				
-				<div class="panel panel-default scrollable">
-					<ul class="media-list">
-						<li class="media">
-							<div class="media">
-							  <div class="media-left">
-								<a href="#">
-								  <img class="media-object" src="/static/images/eq3.png" alt="...">
-								</a>
-							  </div>
-							  <div class="media-body">
-								<h5 class="media-heading"><strong lang="en">Earthquakewarnings</strong></h5>
-							  </div>
-							</div> 
-						</li>
-					</ul>
-				</div>
-				
-		</div>
-		<div class="col-md-9 panel panel-default">
-			<div id="gmap" class="scrollable-90"></div>
-		</div>
-	</div>
- </div>
+    <!-- Main Content -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 panel panel-default">
+                <div class="srollable-80">
+                    <header>
+                        <!-- knockout Filter Input -->					
+                        Name: <input class="form-control" data-bind="value: nameSearch, valueUpdate: 'afterkeydown'" />
+                        HomeTown: <select class="form-control" data-bind="options: homeTowns, value: townSearch"></select>
+                        <hr>
+                    </header>
+                    <div class="content">
+                        <ul class="media-list" data-bind="template: {name:'place', foreach:filteredRecords}"></ul>
+                    </div>
+                </div>
+                <div class="panel panel-default scrollable">
+                    <ul class="media-list">
+                        <li class="media">
+                            <div class="media">
+                                <div class="media-left">
+                                      <a href="#">
+                                        <img class="media-object" src="data:image/png;base64,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" alt="...">
+                                      </a>
+                                </div>
+                                <div class="media-body">
+                                      <h5 class="media-heading"><strong lang="en">Earthquakewarnings</strong></h5>
+                                </div>
+                            </div> 
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-9 panel panel-default">
+                <div id="gmap" class="scrollable-90"></div>
+            </div>
+        </div>
+    </div>
 	
-<!-- Knockout Template for each Place -->	
-	<script data-proofer-ignore type="text/html" id="place">
-		<li class="media" data-bind="attr:{id: id}, click: function() { loadPlace(id) }">
-			<div class="media">
-			  <div class="media-left">
-				<a href="#">
-				  <img class="media-object" data-bind="attr:{src: icon}" alt="...">
-				</a>
-			  </div>
-			  <div class="media-body">
-				<h5 class="media-heading">
-					<strong lang="en" data-bind="text: title"></strong>
-				</h5>
-				<span lang="en" data-bind="text: description"></span>
-				<br>
-				<small>
-					<i><span lang="en" data-bind="text: date"></span></i>
-				</small>
-				<hr>
-			  </div>
-			</div> 
-		</li>
-	</script>
-	     
+    <!-- Knockout Template for each Place -->	
+    <script data-proofer-ignore type="text/html" id="place">
+        <li class="media" data-bind="attr:{id: id}, click: function() { loadPlace(id) }">
+            <div class="media">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object" data-bind="attr:{src: icon}" alt="...">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h5 class="media-heading">
+                        <strong lang="en" data-bind="text: title"></strong>
+                    </h5>
+                    <span lang="en" data-bind="text: description"></span>
+                    <br>
+                    <small>
+                        <i><span lang="en" data-bind="text: date"></span></i>
+                    </small>
+                    <hr>
+                </div>
+            </div> 
+        </li>
+    </script>
+
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="static/js/jquery.min.js"></script>	
-	<script src="static/js/js.cookie.js" charset="utf-8" type="text/javascript"></script>
-	<script src="static/js/jquery-lang.js" charset="utf-8" type="text/javascript"></script>
-	<!-- <script src="js/langpack/nonDynamic.js" charset="utf-8" type="text/javascript"></script> -->
-	<!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="static/js/js.cookie.js" charset="utf-8" type="text/javascript"></script>
+    <script src="static/js/jquery-lang.js" charset="utf-8" type="text/javascript"></script>
+    <!-- <script src="js/langpack/nonDynamic.js" charset="utf-8" type="text/javascript"></script> -->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
     <!-- Latest compiled and minified JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-	<!-- Knockout.js  -->
-	<script src="http://knockoutjs.com/downloads/jquery.tmpl.min.js"></script>	
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
-	<!--  Places JSON Data -->
-	<script src="static/js/places.js"></script>
-	<!--  Styles for GMAP... -->
-	<script src="static/js/gmapstyles.js"></script>
-	<!--  GMAP JS with Callback & Failback... -->
-	<script src="static/js/gmap.js"></script>
-	<!--  APP JS with Knockout Filtering... -->
-	<script src="static/js/placesapp.js"></script>
-	<!-- GMAP API with Callback & Error Failback -->
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdziLyijYagdRorrK8P_5p6KCw2keYZ6Q&callback=initMap" async defer onerror="mapError()"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!-- Knockout.js  -->
+    <script src="http://knockoutjs.com/downloads/jquery.tmpl.min.js"></script>	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+    <!--  Places JSON Data -->
+    <script src="static/js/places.js"></script>
+    <!--  Styles for GMAP... -->
+    <script src="static/js/gmapstyles.js"></script>
+    <!--  GMAP JS with Callback & Failback... -->
+    <script src="static/js/gmap.js"></script>
+    <!--  APP JS with Knockout Filtering... -->
+    <script src="static/js/placesapp.js"></script>
+    <!-- GMAP API with Callback & Error Failback -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdziLyijYagdRorrK8P_5p6KCw2keYZ6Q&callback=initMap" async defer onerror="mapError()"></script>
    
 </body>
 </html>
