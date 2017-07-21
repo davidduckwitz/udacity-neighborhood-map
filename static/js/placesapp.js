@@ -141,7 +141,7 @@ var ViewModel = function (records, homeTowns, markers, weathers) {
 				if(debugging === true){
 						console.log('show marker id: '+r.id);
 				}					
-				showMarker(r.id +1);
+				showMarker(r.id);
 			}
 			if(isMatching === false){
 				if(debugging === true){
@@ -154,7 +154,7 @@ var ViewModel = function (records, homeTowns, markers, weathers) {
 				console.log('Input filtered: Function Knockout "self.filteredRecords()" ');
 				console.log(response);
 			}
-            return r.name.toLowerCase().indexOf(nameSearch) !== -1 && (r.homeTown === townSearch || townSearch === "");			
+            return isMatching;			
         });
 
     }, self);
