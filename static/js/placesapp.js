@@ -138,22 +138,21 @@ var ViewModel = function (records, homeTowns, markers, weathers) {
         return ko.utils.arrayFilter(self.records(), function (r) {
 
 		
-			var response = (Number(r.title.toLowerCase().indexOf(nameSearch) && (r.homeTown === townSearch || townSearch === "")) -1);
-			if(response === -1){
+			var response = (Number(r.title.toLowerCase().indexOf(nameSearch) == -1 && (r.homeTown === townSearch || townSearch === "")) -1);
+			if(!nameSearch && !townSearch){
 				if(debugging === true){
 					console.log('display all');
 				}				
 				showAll();
-			}
+			}		
 			
-			if (r.name.toLowerCase().indexOf(nameSearch) > -1 && (r.homeTown === townSearch || townSearch === "")) {
+			if (r.name.toLowerCase().indexOf(nameSearch) != -1 && (r.homeTown === townSearch || townSearch === "")) {
 				
-				if(r.id === r.name.toLowerCase().indexOf(nameSearch) && (r.homeTown === townSearch || townSearch === "")){
-					if(debugging === true){
+				if(debugging === true){
 						console.log('show marker id: '+r.id);
-					}					
-					showMarker(r.id);
-				}
+				}					
+				showMarker(r.id +1);
+				
 				
 			} else {
 				
@@ -166,6 +165,7 @@ var ViewModel = function (records, homeTowns, markers, weathers) {
 			if(debugging === true){
 				console.log('Input filtered: Function Knockout "self.filteredRecords()" ');
 			}
+					
 			console.log(response);
             return r.name.toLowerCase().indexOf(nameSearch) !== -1 && (r.homeTown === townSearch || townSearch === "");			
         });

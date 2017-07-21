@@ -118,7 +118,7 @@ function addMarker(lat, lng, i, alllocations) {
  ****************************************/
 var mapError = function() {
 	if(debugging === true){
-		console.log('Google Map Loading error: Function "mapError()" '+index);
+		console.log('Google Map Loading error: Function "mapError()" ');
 	}
 	alert('Error Loading GoogleMaps Data vom API V3 - Please Check your Code');
 };
